@@ -10,6 +10,13 @@ export default (appInfo: EggAppInfo) => {
   // add your egg config in here
   config.middleware = [];
 
+  // add mongo egg config
+  config.mongoose = {
+    // url: 'mongodb://localhost:27017/lego',
+    url: process.env.EGG_MONGODB_URL || 'mongodb://118.24.45.50:27017/lego',
+    options: {},
+  };
+
   // add your special config in here
   const bizConfig = {
     sourceUrl: `https://github.com/eggjs/examples/tree/master/${appInfo.name}`,
