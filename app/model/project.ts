@@ -6,6 +6,7 @@ const ProjectSchema = new Schema({
   img: { type: String },
   git: { type: String },
   site: { type: String },
+  vuelocation: { type: String },
 });
 
 export interface IProject {
@@ -14,6 +15,7 @@ export interface IProject {
   img: string;
   git: string;
   site: string;
+  vuelocation: string;
 }
 
 export default (app: Application) => {
