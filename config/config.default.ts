@@ -7,6 +7,14 @@ export default (appInfo: EggAppInfo) => {
   // use for cookie sign key, should change to your own and keep security
   config.keys = appInfo.name + '_1581507600692_1134';
 
+  // 默认不建议关闭，开发态先关闭
+  // 可以参考 https://blog.csdn.net/weixin_43704471/article/details/90763103
+  config.security = {
+    csrf: {
+      enable: false,
+    },
+  };
+
   // add your egg config in here
   config.middleware = [];
 
