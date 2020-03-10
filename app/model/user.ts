@@ -3,13 +3,19 @@ import { Schema } from 'mongoose';
 
 const UserSchema = new Schema({
   name: { type: String },
-  sex: { type: String },
+  type: { type: String },
+  avatarUrl: { type: String },
+  email: { type: String },
+  userId: { type: String },
   psw: { type: String },
 });
 
 export interface IUser {
   name: string;
-  sex: string;
+  type: string;
+  avatarUrl: string;
+  email: string;
+  userId: string;
   psw: string;
 }
 

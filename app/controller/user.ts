@@ -17,4 +17,24 @@ export default class UserController extends Controller {
       // TODO: 错误判断
     }
   }
+
+  public async user() {
+    const { ctx } = this;
+    const body = ctx.request.body;
+    const res = await ctx.service.user.findOne(body.name, body.type);
+    if (!res) {
+      await ctx.service.user.add(body);
+      ctx.body = {
+        code: 0,
+        msg: 'success',
+        data: null,
+      };
+    } else {
+      ctx.body = {
+        code: 0,
+        msg: 'success',
+        data: res,
+      };
+    }
+  }
 }
