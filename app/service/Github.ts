@@ -1,9 +1,6 @@
 import { Service } from 'egg';
 import { Octokit } from '@octokit/rest';
 
-const octokit = new Octokit({
-  auth: '719db6e02c323bc91ef78dfcbcccb15b20b3cea0',
-});
 
 /**
  * Test Service
@@ -16,7 +13,10 @@ export default class GithubService extends Service {
     return await this.ctx.model.File.find();
   }
 
-  public async getTreeBySha(owner: string, repo: string, tree_sha: string) {
+  public async getTreeBySha(owner: string, repo: string, tree_sha: string, access_token: string) {
+    const octokit = new Octokit({
+      auth: access_token,
+    });
     return await octokit.git.getTree({
       owner,
       repo,
@@ -24,7 +24,10 @@ export default class GithubService extends Service {
     });
   }
 
-  public async getBlob(owner: string, repo: string, file_sha: string) {
+  public async getBlob(owner: string, repo: string, file_sha: string, access_token: string) {
+    const octokit = new Octokit({
+      auth: access_token,
+    });
     return await octokit.git.getBlob({ owner, repo, file_sha });
   }
 }
