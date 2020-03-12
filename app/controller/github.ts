@@ -9,13 +9,13 @@ export default class GithubController extends Controller {
   public async getRepoNodesByPath() {
     const { ctx } = this;
 
-    const { git, sha } = ctx.request.body;
+    const { git, sha, access_token } = ctx.request.body;
     const [ owner, repo ] = git
       .match(/[^\\/]+\/[^\\/]+(?=[.+\\.])/)[0]
       .split('/');
 
     try {
-      const temp = await ctx.service.github.getTreeBySha(owner, repo, sha);
+      const temp = await ctx.service.github.getTreeBySha(owner, repo, sha, access_token);
       ctx.body = temp.data.tree;
     } catch (e) {
       ctx.body = e;
@@ -23,7 +23,7 @@ export default class GithubController extends Controller {
   }
   public async getContent() {
     const { ctx } = this;
-    const { git, sha } = this.ctx.request.body;
+    const { git, sha, access_token } = this.ctx.request.body;
     const [ owner, repo ] = git
       .match(/[^\\/]+\/[^\\/]+(?=[.+\\.])/)[0]
       .split('/');
@@ -36,6 +36,7 @@ export default class GithubController extends Controller {
         owner,
         repo,
         sha,
+        access_token,
       );
 
       ctx.body = result.data.content;
@@ -46,7 +47,7 @@ export default class GithubController extends Controller {
   }
   public async getFileTree() {
     const { ctx } = this;
-    const { git, vuelocation } = ctx.request.body;
+    const { git, vuelocation, access_token } = ctx.request.body;
     const [ owner, repo ] = git
       .match(/[^\\/]+\/[^\\/]+(?=[.+\\.])/)[0]
       .split('/');
@@ -57,6 +58,7 @@ export default class GithubController extends Controller {
         owner,
         repo,
         'master',
+        access_token,
       );
 
       let root = result.data.tree;
@@ -64,7 +66,7 @@ export default class GithubController extends Controller {
       for (const sha of paths) {
         for (const node of root) {
           if (node.path === sha) {
-            const temp = await ctx.service.github.getTreeBySha(owner, repo, node.sha);
+            const temp = await ctx.service.github.getTreeBySha(owner, repo, node.sha, access_token);
             root = temp.data.tree;
             break;
           }
