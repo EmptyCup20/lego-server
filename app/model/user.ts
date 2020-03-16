@@ -13,10 +13,10 @@ const UserSchema = new Schema({
 export interface IUser {
   name: string;
   type: string;
-  avatarUrl: string;
-  email: string;
-  userId: string;
-  psw: string;
+  avatarUrl?: string;
+  email?: string;
+  userId?: string;
+  psw?: string;
 }
 
 export default (app: Application) => {
