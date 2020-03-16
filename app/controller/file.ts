@@ -7,6 +7,11 @@ export default class FileController extends Controller {
     const { ctx } = this;
     ctx.body = await ctx.service.file.find();
   }
+  public async find() {
+    const { ctx } = this;
+    const { key } = ctx.request.query;
+    ctx.body = await ctx.service.file.findByName(key);
+  }
   public async add() {
     const { ctx } = this;
     const file: IFile = ctx.request.body;
