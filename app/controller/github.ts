@@ -78,4 +78,28 @@ export default class GithubController extends Controller {
       ctx.body = e;
     }
   }
+
+  public async pushFile() {
+    const { ctx } = this;
+    const { git, access_token, content, committer, path, commitMsg } = ctx.request.body;
+    const [ owner, repo ] = git
+      .match(/[^\\/]+\/[^\\/]+(?=[.+\\.])/)[0]
+      .split('/');
+    try {
+      const message = commitMsg || 'feat: add a file';
+      const result = await ctx.service.github.createOrUpdateFile(
+        owner,
+        repo,
+        message,
+        access_token,
+        path,
+        content,
+        committer,
+        committer,
+      );
+      ctx.body = result;
+    } catch (e) {
+      ctx.body = e;
+    }
+  }
 }

@@ -12,9 +12,11 @@ export default (app: Application) => {
 
   router.post('/git/getContent', controller.github.getContent);
   router.post('/git/fileTree', controller.github.getFileTree);
+  router.post('/git/pushFile', controller.github.pushFile);
   router.post('/git/getRepoNodesByPath', controller.github.getRepoNodesByPath);
 
   router.get('/file', controller.file.list);
+  router.get('/file/find', controller.file.find);
   router.get('/file/getContent', controller.file.getContent);
   router.post('/file/add', controller.file.add);
   router.post('/file/update', controller.file.update);
