@@ -24,6 +24,7 @@ export default (app: Application) => {
   router.post('/file/remove', controller.file.remove);
 
   router.post('/user', controller.user.user);
-  router.get('/user', controller.user.getUserList);
-  router.get('/login', controller.user.login);
+  router.put('/user', controller.user.updateUserInfo);
+  router.get('/user', controller.user.getUserInfo);
+  // router.get('/login', controller.user.login);
 };
