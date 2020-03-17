@@ -13,6 +13,9 @@ export default class FileService extends Service {
   public async findByName(key: string) {
     return await this.ctx.model.File.find({ name: new RegExp(key) });
   }
+  public async findById(key: string) {
+    return await this.ctx.model.File.find({ _id: key });
+  }
   public async add(file: IFile) {
     return await this.ctx.model.File.insertMany(file);
   }

@@ -4,12 +4,25 @@ import { IProject } from '../model/project';
 export default class ProjectController extends Controller {
   public async list() {
     const { ctx } = this;
-    ctx.body = await ctx.service.project.list();
+    const { pagesize, pageno } = ctx.request.query;
+    ctx.body = await ctx.service.project.list(parseInt(pagesize), parseInt(pageno));
+  }
+  public async findlistByUser() {
+    const { ctx } = this;
+    const { userId, pagesize, pageno } = ctx.request.query;
+    ctx.body = await ctx.service.project.findlistByUser(
+      userId,
+      parseInt(pagesize),
+      parseInt(pageno),
+    );
   }
 
   public async add() {
     const { ctx } = this;
     const pro: IProject = ctx.request.body;
+    pro.type = pro.git.match(/github/) ? 'github' : 'gitlab';
+    pro.createTime = new Date();
+    pro.lastModify = new Date();
 
     ctx.body = await ctx.service.project.add(pro);
   }

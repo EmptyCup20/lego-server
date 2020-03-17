@@ -6,7 +6,11 @@ const ProjectSchema = new Schema({
   img: { type: String },
   git: { type: String },
   site: { type: String },
+  type: { type: String },
+  userId: { type: String },
   vuelocation: { type: String },
+  createTime: { type: Date },
+  lastModify: { type: Date },
 });
 
 export interface IProject {
@@ -15,7 +19,11 @@ export interface IProject {
   img: string;
   git: string;
   site: string;
+  type: string;
+  userId: string;
   vuelocation: string;
+  createTime: Date;
+  lastModify: Date;
 }
 
 export default (app: Application) => {
