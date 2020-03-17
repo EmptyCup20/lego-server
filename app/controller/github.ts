@@ -1,4 +1,5 @@
 import { Controller } from 'egg';
+import { IFile } from '../model/file';
 
 /**
  * @Author: xiangxiao3
@@ -9,71 +10,38 @@ export default class GithubController extends Controller {
   public async getRepoNodesByPath() {
     const { ctx } = this;
 
-    const { git, sha, access_token } = ctx.request.body;
-    const [ owner, repo ] = git
-      .match(/[^\\/]+\/[^\\/]+(?=[.+\\.])/)[0]
-      .split('/');
+    const { type } = ctx.request.body;
+    const gitService =
+      type === 'github' ? ctx.service.github : ctx.service.gitlab;
 
     try {
-      const temp = await ctx.service.github.getTreeBySha(owner, repo, sha, access_token);
-      ctx.body = temp.data.tree;
+      ctx.body = await gitService.getTreeByNode();
     } catch (e) {
       ctx.body = e;
     }
   }
   public async getContent() {
     const { ctx } = this;
-    const { git, sha, access_token } = this.ctx.request.body;
-    const [ owner, repo ] = git
-      .match(/[^\\/]+\/[^\\/]+(?=[.+\\.])/)[0]
-      .split('/');
-
-    // async function getContent(owner, repo, path, token) {
-    // octokit.authenticate({type: 'oauth', token})
+    const { type } = this.ctx.request.body;
+    const gitService =
+      type === 'github' ? ctx.service.github : ctx.service.gitlab;
 
     try {
-      const result = await ctx.service.github.getBlob(
-        owner,
-        repo,
-        sha,
-        access_token,
-      );
+      const result = await gitService.getBlob();
 
-      ctx.body = result.data.content;
+      ctx.body = result;
     } catch (e) {
-      ctx.body =
-        '(FILE) - ' + owner + '/' + repo + '/' + sha + ' does not exist';
+      ctx.body = e;
     }
   }
   public async getFileTree() {
     const { ctx } = this;
-    const { git, vuelocation, access_token } = ctx.request.body;
-    const [ owner, repo ] = git
-      .match(/[^\\/]+\/[^\\/]+(?=[.+\\.])/)[0]
-      .split('/');
-    const paths = vuelocation.split('/');
+    const { type } = ctx.request.body;
+    const gitService =
+      type === 'github' ? ctx.service.github : ctx.service.gitlab;
 
     try {
-      const result = await ctx.service.github.getTreeBySha(
-        owner,
-        repo,
-        'master',
-        access_token,
-      );
-
-      let root = result.data.tree;
-
-      for (const sha of paths) {
-        for (const node of root) {
-          if (node.path === sha) {
-            const temp = await ctx.service.github.getTreeBySha(owner, repo, node.sha, access_token);
-            root = temp.data.tree;
-            break;
-          }
-        }
-      }
-
-      ctx.body = root;
+      ctx.body = await gitService.getFileTree();
     } catch (e) {
       ctx.body = e;
     }
@@ -81,22 +49,18 @@ export default class GithubController extends Controller {
 
   public async pushFile() {
     const { ctx } = this;
-    const { git, access_token, content, committer, path, commitMsg } = ctx.request.body;
-    const [ owner, repo ] = git
-      .match(/[^\\/]+\/[^\\/]+(?=[.+\\.])/)[0]
-      .split('/');
+    const { fileId, type } = ctx.request.body;
+
+    const gitService =
+      type === 'github' ? ctx.service.github : ctx.service.gitlab;
+
     try {
-      const message = commitMsg || 'feat: add a file';
-      const result = await ctx.service.github.createOrUpdateFile(
-        owner,
-        repo,
-        message,
-        access_token,
-        path,
-        content,
-        committer,
-        committer,
+      const files: IFile[] = await ctx.service.file.findById(fileId);
+      const content: string = await ctx.service.file.getFileContent(
+        files[0].url,
       );
+
+      const result = await gitService.createOrUpdateFile(content);
       ctx.body = result;
     } catch (e) {
       ctx.body = e;

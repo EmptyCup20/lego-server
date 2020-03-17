@@ -6,6 +6,7 @@ export default (app: Application) => {
   router.get('/', controller.home.index);
 
   router.get('/project', controller.project.list);
+  router.get('/project/findlistByUser', controller.project.findlistByUser);
   router.post('/project/add', controller.project.add);
   router.post('/project/update', controller.project.update);
   router.post('/project/remove', controller.project.remove);
