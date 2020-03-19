@@ -78,7 +78,7 @@ export default class GitlabService extends Service {
 
   public async createOrUpdateFile(content: string) {
     const { ctx } = this;
-    const { git, committer, path, commitMsg } = ctx.request.body;
+    const { git, access_token, committer, path, commitMsg } = ctx.request.body;
     const [ owner, repo ] = git
       .match(/[^\\/]+\/[^\\/]+(?=[.+\\.])/)[0]
       .split('/');
@@ -96,12 +96,11 @@ export default class GitlabService extends Service {
         dataType: 'json',
         contentType: 'application/json',
         method: 'POST',
-        // auth: 'PRIVATE-TOKEN: ' + access_token,
+        auth: 'PRIVATE-TOKEN: ' + access_token,
         headers: {
           'content-type': 'application/json',
         },
         data: {
-          file_path: path,
           branch: 'master',
           author_email: committer.email,
           author_name: committer.name,
