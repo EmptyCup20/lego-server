@@ -15,7 +15,7 @@ const getTree = async (
   access_token: string,
 ) => {
   const octokit = new Octokit({
-    auth: 'token ' + access_token,
+    auth: access_token ? 'token ' + access_token : '',
   });
 
   const result: any = await octokit.git.getTree({
@@ -70,7 +70,7 @@ export default class GithubService extends Service {
       .match(/[^\\/]+\/[^\\/]+(?=[.+\\.])/)[0]
       .split('/');
     const octokit = new Octokit({
-      auth: 'token ' + access_token,
+      auth: access_token ? 'token ' + access_token : '',
     });
     const result = await octokit.git.getBlob({ owner, repo, file_sha: sha });
     return result.data.content;
@@ -93,7 +93,7 @@ export default class GithubService extends Service {
     const message: string = commitMsg || 'feat: add a file';
 
     const octokit = new Octokit({
-      auth: 'token ' + access_token,
+      auth: access_token ? 'token ' + access_token : '',
     });
     return await octokit.repos.createOrUpdateFile({
       owner,
