@@ -6,7 +6,9 @@ export default (app: Application) => {
   router.get('/', controller.home.index);
 
   router.get('/project', controller.project.list);
+  router.get('/project/count', controller.project.listCount);
   router.get('/project/findlistByUser', controller.project.findlistByUser);
+  router.get('/project/findlistByUser/count', controller.project.findlistCountByUser);
   router.post('/project/add', controller.project.add);
   router.post('/project/update', controller.project.update);
   router.post('/project/remove', controller.project.remove);
@@ -17,6 +19,7 @@ export default (app: Application) => {
   router.post('/git/getRepoNodesByPath', controller.github.getRepoNodesByPath);
 
   router.get('/file', controller.file.list);
+  router.get('/file/count', controller.file.listCount);
   router.get('/file/find', controller.file.find);
   router.get('/file/getContent', controller.file.getContent);
   router.post('/file/add', controller.file.add);
