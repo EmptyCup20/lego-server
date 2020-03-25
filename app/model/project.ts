@@ -8,6 +8,7 @@ const ProjectSchema = new Schema({
   site: { type: String },
   type: { type: String },
   userId: { type: String },
+  editorType: { type: String },
   vuelocation: { type: String },
   createTime: { type: Date },
   lastModify: { type: Date },
@@ -21,6 +22,7 @@ export interface IProject {
   site: string;
   type: string;
   userId: string;
+  editorType: string;
   vuelocation: string;
   createTime: Date;
   lastModify: Date;
